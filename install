@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Install Kodi Autostart files to operational directories
+
+set -e
+
+if [ $(id -u) -ne 0 ]; then
+    echo "Root privileges are required for running $0."
+    exit 1
+fi
+
+MY_DIR=$(dirname $0)
+systemd='/etc/systemd/system/'
+unit='kodi.service'
+sbin='/usr/local/sbin/'
+script='kodi-autostart'
+sbinscript="$sbin/$script"
+
+echo "Stopping $unit"
+systemctl stop "$unit"
+
+echo "Copying $unit to $systemd"
+cp "$MY_DIR/$unit" "$systemd"
+echo "Copying $script to $sbin"
+cp "$MY_DIR/$script" "$sbin"
+
+echo "Giving $USER execute permission on $sbinscript"
+chmod u+x "$sbinscript"
+
+echo 'Reloading systemd daemon units'
+systemctl daemon-reload
+echo "Starting $unit"
+systemctl start "$unit"
+echo "Reenabling $unit"
+systemctl reenable "$unit"
+echo "Status of $unit:"
+systemctl status "$unit"
