@@ -1,9 +1,22 @@
 #!/usr/bin/env bash
 
+retroarch=$( /usr/bin/xmllint \
+    --xpath 'string(//settings/setting[@id="iarl_path_to_retroarch"]/@value)' \
+    /home/markieta/.kodi/userdata/addon_data/plugin.program.iarl/settings.xml
+)
+
 while true
 do
     ping -qc1 vizio > /dev/null 2>&1 &&
     /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
-    /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7 && 
-    break
+    /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
+
+    retroarch_launch=$(journalctl -u kodi.service | tail | grep "$retroarch" | cut -d' ' -f6-)
+
+    echo retroarch: "$retroarch"
+    echo retroarch_launch: "$retroarch_launch"
+
+    if [ -n retroarch_launch ]; then
+        $retroarch
+    fi
 done
