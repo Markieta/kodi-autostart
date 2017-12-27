@@ -13,7 +13,7 @@ do
     /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
     /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
 
-    retroarch_launch=$(journalctl -u kodi.service | tail | grep "$retroarch" | cut -d' ' -f6-)
+    retroarch_launch=$(journalctl -u kodi.service | grep "$retroarch" | tail -1 | cut -d' ' -f6-)
     launch_command=$(echo $retroarch_launch | cut -d' ' -f1-3)
     launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
 
