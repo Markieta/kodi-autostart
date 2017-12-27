@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export DISPLAY=:0
+
 retroarch=$( /usr/bin/xmllint \
     --xpath 'string(//settings/setting[@id="iarl_path_to_retroarch"]/@value)' \
     /home/kodi/.kodi/userdata/addon_data/plugin.program.iarl/settings.xml
@@ -16,7 +18,9 @@ do
     launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
 
     if [ -n retroarch_launch ]; then
+        sleep 1 && /usr/bin/xrandr -s 1920x1080 &
+
         /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
-            $launch_command "$launch_rom" -- :0 -nolisten tcp vt7
+            $launch_command "$launch_rom" -- :0  -nolisten tcp vt7
     fi
 done
