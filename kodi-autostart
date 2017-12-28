@@ -9,7 +9,8 @@ retroarch=$( /usr/bin/xmllint \
 
 while true
 do
-    ping -qc1 vizio > /dev/null 2>&1 &&
+    until ping -qc1 vizio > /dev/null 2>&1; do :; done
+
     /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
     /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
 
