@@ -19,7 +19,7 @@ do
     launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
 
     if [ -n retroarch_launch ]; then
-        sleep 1 && /usr/bin/xrandr -s 1920x1080 &
+        sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
 
         /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
             $launch_command "$launch_rom" -- :0  -nolisten tcp vt7
