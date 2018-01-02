@@ -7,6 +7,11 @@ retroarch=$( /usr/bin/xmllint \
     /home/kodi/.kodi/userdata/addon_data/plugin.program.iarl/settings.xml
 )
 
+steam=$( /usr/bin/xmllint \
+    --xpath 'string(//settings/setting[@id="SteamLinux"]/@value)' \
+    /home/kodi/.kodi/userdata/addon_data/script.steam.launcher/settings.xml
+)
+
 while true
 do
     until ping -qc1 vizio > /dev/null 2>&1; do :; done
