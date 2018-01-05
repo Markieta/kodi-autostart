@@ -19,6 +19,9 @@ sbinscript="$sbin/$script"
 echo "Stopping $unit"
 systemctl stop "$unit"
 
+echo "Giving $USER ownership of $sbinscript"
+chown kodi "$sbinscript"
+
 echo "Copying $unit to $systemd"
 cp "$MY_DIR/$unit" "$systemd"
 echo "Copying $script to $sbin"
