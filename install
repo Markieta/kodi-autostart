@@ -15,26 +15,16 @@ unit='kodi.service'
 sbin='/usr/local/sbin/'
 script='kodi-autostart'
 sbinscript="$sbin/$script"
+dummy='kodi-dummy'
+sbindummy="$sbin/$dummy"
 
-echo "Stopping $unit"
 systemctl stop "$unit"
 
-echo "Giving $USER ownership of $sbinscript"
-chown kodi "$sbinscript"
-
-echo "Copying $unit to $systemd"
 cp "$MY_DIR/$unit" "$systemd"
-echo "Copying $script to $sbin"
-cp "$MY_DIR/$script" "$sbin"
+cp "$MY_DIR/$script" "$MY_DIR/$dummy" "$sbin"
 
-echo "Giving $USER execute permission on $sbinscript"
-chmod u+x "$sbinscript"
+chown kodi "$sbinscript" "$sbindummy"
+chmod u+x "$sbinscript" "$sbindummy"
 
-echo 'Reloading systemd daemon units'
 systemctl daemon-reload
-echo "Starting $unit"
 systemctl start "$unit"
-echo "Reenabling $unit"
-systemctl reenable "$unit"
-echo "Status of $unit:"
-systemctl status "$unit"
