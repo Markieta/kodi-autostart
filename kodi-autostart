@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+startXServer() {
+    /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
+        "$@" -- :0 -nocursor -nolisten tcp vt7
+}
+
 export DISPLAY=:0
 
 retroarch=$( /usr/bin/xmllint \
@@ -14,10 +19,9 @@ steam=$( /usr/bin/xmllint \
 
 while true
 do
-    until ping -qc1 vizio > /dev/null 2>&1; do :; done
+    until ping -qc1 vizio > /dev/null 2>&1; do sleep 1; done
 
-    /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
-    /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
+    startXServer /usr/bin/kodi-standalone
 
     journalctl=$(journalctl -u kodi.service --since "30 seconds ago")
     retroarch_launch=$(echo "$journalctl" | grep "$retroarch" | tail -1 | cut -d' ' -f6-)
@@ -27,8 +31,10 @@ do
         launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
 
         sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
+        startXServer $launch_command "$launch_rom"
 
-        /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
-            $launch_command "$launch_rom" -- :0 -nolisten tcp vt7
+    elif echo $journalctl | grep -q 'steam-launch.sh'; then
+        sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
+        startXServer /usr/bin/steam -bigpicture
     fi
 done
