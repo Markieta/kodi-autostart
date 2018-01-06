@@ -19,11 +19,13 @@ do
     /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
     /usr/bin/kodi-standalone -- :0 -nolisten tcp vt7
 
-    retroarch_launch=$(journalctl -u kodi.service | grep "$retroarch" | tail -1 | cut -d' ' -f6-)
-    launch_command=$(echo $retroarch_launch | cut -d' ' -f1-3)
-    launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
+    journalctl=$(journalctl -u kodi.service --since "30 seconds ago")
+    retroarch_launch=$(echo "$journalctl" | grep "$retroarch" | tail -1 | cut -d' ' -f6-)
 
-    if [ -n retroarch_launch ]; then
+    if [ -n "$retroarch_launch" ]; then
+        launch_command=$(echo $retroarch_launch | cut -d' ' -f1-3)
+        launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
+
         sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
 
         /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
