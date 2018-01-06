@@ -15,16 +15,16 @@ unit='kodi.service'
 sbin='/usr/local/sbin/'
 script='kodi-autostart'
 sbinscript="$sbin/$script"
-dummy='kodi-dummy'
-sbindummy="$sbin/$dummy"
+presteam='pre-steam'
+sbinpresteam="$sbin/$presteam"
 
 systemctl stop "$unit"
 
 cp "$MY_DIR/$unit" "$systemd"
-cp "$MY_DIR/$script" "$MY_DIR/$dummy" "$sbin"
+cp "$MY_DIR/$script" "$MY_DIR/$presteam" "$sbin"
 
-chown kodi "$sbinscript" "$sbindummy"
-chmod u+x "$sbinscript" "$sbindummy"
+chown kodi:kodi "$sbinscript" "$sbinpresteam"
+chmod u+x "$sbinscript" "$sbinpresteam"
 
 systemctl daemon-reload
 systemctl start "$unit"

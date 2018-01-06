@@ -23,7 +23,7 @@ do
 
     startXServer /usr/bin/kodi-standalone
 
-    journalctl=$(journalctl -u kodi.service --since "30 seconds ago")
+    journalctl=$(journalctl --since "30 seconds ago")
     retroarch_launch=$(echo "$journalctl" | grep "$retroarch" | tail -1 | cut -d' ' -f6-)
 
     if [ -n "$retroarch_launch" ]; then
@@ -33,7 +33,7 @@ do
         sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
         startXServer $launch_command "$launch_rom"
 
-    elif echo $journalctl | grep -q 'steam-launch.sh'; then
+    elif echo $journalctl | grep -q 'steam-launch'; then
         sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
         startXServer /usr/bin/steam -bigpicture
     fi
