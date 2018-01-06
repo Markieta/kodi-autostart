@@ -6,7 +6,6 @@ After = systemd-user-sessions.service network.target sound.target mariadb.servic
 User=kodi
 Group = kodi
 Type = simple
-Environment = "AE_SINK=ALSA"
 ExecStart = /usr/local/sbin/kodi-autostart
 Restart = on-abort
 RestartSec=5s
