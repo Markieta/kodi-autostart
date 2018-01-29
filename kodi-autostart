@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 
 startXServer() {
-    /usr/bin/xinit /usr/bin/dbus-launch --exit-with-session \
+    xinit /usr/bin/dbus-launch --exit-with-session \
         "$@" -- :0 -nocursor -nolisten tcp vt7
 }
 
 export DISPLAY=:0
 
-retroarch=$( /usr/bin/xmllint \
+retroarch=$( xmllint \
     --xpath 'string(//settings/setting[@id="iarl_path_to_retroarch"]/@value)' \
     /home/kodi/.kodi/userdata/addon_data/plugin.program.iarl/settings.xml
 )
 
-steam=$( /usr/bin/xmllint \
+steam=$( xmllint \
     --xpath 'string(//settings/setting[@id="SteamLinux"]/@value)' \
     /home/kodi/.kodi/userdata/addon_data/script.steam.launcher/settings.xml
 )
@@ -30,11 +30,11 @@ do
         launch_command=$(echo $retroarch_launch | cut -d' ' -f1-3)
         launch_rom=$(echo $retroarch_launch | cut -d' ' -f4-)
 
-        sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
+        sleep 1 && xrandr -s 1920x1080 -r 60 &
         startXServer $launch_command "$launch_rom"
 
     elif echo $journalctl | grep -q 'steam-launch'; then
-        sleep 1 && /usr/bin/xrandr -s 1920x1080 -r 60 &
+        sleep 1 && xrandr -s 1920x1080 -r 60 &
         startXServer /usr/bin/steam -bigpicture
     fi
 done
