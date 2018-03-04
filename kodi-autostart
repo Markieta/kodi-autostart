@@ -19,8 +19,6 @@ steam=$( xmllint \
 
 while true
 do
-    until ping -qc1 vizio > /dev/null 2>&1; do sleep 1; done
-
     startXServer /usr/bin/kodi-standalone
 
     journalctl=$(journalctl --since "30 seconds ago")
