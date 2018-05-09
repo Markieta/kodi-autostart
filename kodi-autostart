@@ -19,7 +19,7 @@ steam=$( xmllint \
 
 while true
 do
-    until xrandr | grep -q 'DP-1 connected'; do sleep 5; done
+    until [ $(cat /sys/class/drm/card0/card0-DP-1/status) = 'connected' ]; do sleep 5; done
 
     startXServer /usr/bin/kodi-standalone
 
