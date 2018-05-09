@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
+export DISPLAY=:0
+
 startXServer() {
     xinit /usr/bin/dbus-launch --exit-with-session \
         "$@" -- :0 -nocursor -nolisten tcp vt7
 }
-
-export DISPLAY=:0
 
 retroarch=$( xmllint \
     --xpath 'string(//settings/setting[@id="iarl_path_to_retroarch"]/@value)' \
@@ -19,6 +19,8 @@ steam=$( xmllint \
 
 while true
 do
+    until xrandr | grep -q 'DP-1 connected'; do sleep 5; done
+
     startXServer /usr/bin/kodi-standalone
 
     journalctl=$(journalctl --since "30 seconds ago")
